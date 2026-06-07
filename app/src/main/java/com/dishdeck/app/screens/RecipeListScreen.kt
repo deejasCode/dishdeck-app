@@ -71,7 +71,9 @@ fun RecipeListScreen(navController: NavHostController) {
             TopAppBar(
                 title = { Text("DishDeck") },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = {
+                        navController.navigate(Screen.Favourites.route)
+                    }) {
                         Icon(Icons.Default.Menu, contentDescription = "Menu")
                     }
                 },
