@@ -14,6 +14,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.dishdeck.app.ui.theme.DishDeckTheme
 
+/**
+ * Displays a filtered list of recipes marked as favourites.
+ * Shows an empty state message when no favourites exist.
+ *
+ * @param navController The navigation controller for screen navigation.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavouritesScreen(navController: NavHostController) {

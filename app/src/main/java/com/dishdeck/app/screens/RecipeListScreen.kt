@@ -52,6 +52,13 @@ val sampleRecipes = listOf(
 
 val categories = listOf("All", "Breakfast", "Lunch", "Dinner", "Snacks")
 
+/**
+ * Displays the main recipe list screen with category filtering.
+ * Users can browse all recipes, filter by category, and navigate
+ * to recipe details or add a new recipe.
+ *
+ * @param navController The navigation controller for screen navigation.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeListScreen(navController: NavHostController) {
@@ -132,6 +139,12 @@ fun RecipeListScreen(navController: NavHostController) {
     }
 }
 
+/**
+ * Displays a single recipe card in the recipe list.
+ *
+ * @param recipe The recipe data to display.
+ * @param onClick Callback triggered when the card is tapped.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeCard(recipe: Recipe, onClick: () -> Unit) {

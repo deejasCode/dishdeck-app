@@ -18,6 +18,13 @@ import com.dishdeck.app.navigation.Screen
 import com.dishdeck.app.screens.sampleRecipes
 import com.dishdeck.app.ui.theme.DishDeckTheme
 
+/**
+ * Displays the full details of a selected recipe including
+ * ingredients, steps, and a servings scaler.
+ *
+ * @param navController The navigation controller for screen navigation.
+ * @param recipeId The ID of the recipe to display.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeDetailScreen(

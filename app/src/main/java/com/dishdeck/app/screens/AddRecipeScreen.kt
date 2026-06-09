@@ -14,6 +14,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.dishdeck.app.ui.theme.DishDeckTheme
 
+/**
+ * Screen for adding a new recipe or editing an existing one.
+ * Contains input fields for all recipe properties.
+ *
+ * @param navController The navigation controller for screen navigation.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddRecipeScreen(navController: NavHostController) {
