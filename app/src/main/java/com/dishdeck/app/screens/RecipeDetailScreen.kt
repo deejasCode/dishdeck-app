@@ -16,6 +16,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dishdeck.app.navigation.Screen
 import com.dishdeck.app.screens.sampleRecipes
+import com.dishdeck.app.model.Ingredient
 import com.dishdeck.app.ui.theme.DishDeckTheme
 
 /**
@@ -103,15 +104,26 @@ fun RecipeDetailScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Ingredients
+            // Scaled ingredients
             Text("Ingredients", style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(8.dp))
             recipe?.ingredients?.forEach { ingredient ->
-                Text("• $ingredient", style = MaterialTheme.typography.bodyMedium)
+                // Calculate scaled quantity
+                val scaledQuantity = ingredient.quantity *
+                        (servings.toDouble() / (recipe.servings.toDouble()))
+
+                // Format nicely - show whole numbers without decimal point
+                val formattedQuantity = if (scaledQuantity % 1.0 == 0.0) {
+                    scaledQuantity.toInt().toString()
+                } else {
+                    String.format("%.1f", scaledQuantity)
+                }
+
+                Text(
+                    text = "• $formattedQuantity ${ingredient.unit} ${ingredient.name}",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
             // Steps
             Text("Steps", style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(8.dp))

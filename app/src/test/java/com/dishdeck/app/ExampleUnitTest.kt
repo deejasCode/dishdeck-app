@@ -1,6 +1,7 @@
 package com.dishdeck.app
 
 import com.dishdeck.app.model.Recipe
+import com.dishdeck.app.model.Ingredient
 import org.junit.Test
 import org.junit.Assert.*
 
@@ -15,7 +16,11 @@ class DishDeckUnitTest {
             name = "Pasta Carbonara",
             category = "Dinner",
             servings = 2,
-            ingredients = listOf("pasta", "eggs", "bacon"),
+            ingredients = listOf(
+                Ingredient("pasta", 200.0, "grams"),
+                Ingredient("eggs", 2.0, "whole"),
+                Ingredient("bacon", 100.0, "grams")
+            ),
             steps = "Boil pasta. Fry bacon.",
             isFavourite = false
         )
@@ -78,7 +83,11 @@ class DishDeckUnitTest {
     @Test
     fun recipe_ingredientsListIsCorrect() {
         // Arrange
-        val ingredients = listOf("pasta", "eggs", "bacon")
+        val ingredients = listOf(
+            Ingredient("pasta", 200.0, "grams"),
+            Ingredient("eggs", 2.0, "whole"),
+            Ingredient("bacon", 100.0, "grams")
+        )
 
         // Act
         val recipe = Recipe(
@@ -88,6 +97,6 @@ class DishDeckUnitTest {
 
         // Assert
         assertEquals(3, recipe.ingredients.size)
-        assertTrue(recipe.ingredients.contains("eggs"))
+        assertTrue(recipe.ingredients.any { it.name == "eggs" })
     }
 }

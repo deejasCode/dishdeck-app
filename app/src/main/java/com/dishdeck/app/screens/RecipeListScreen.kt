@@ -18,36 +18,67 @@ import com.dishdeck.app.navigation.Screen
 import androidx.compose.ui.tooling.preview.Preview
 import com.dishdeck.app.ui.theme.DishDeckTheme
 import androidx.navigation.compose.rememberNavController
+import com.dishdeck.app.model.Ingredient
 
 // Sample data to display while we don't have a backend yet
 val sampleRecipes = listOf(
     Recipe(
         id = 1,
-        name = "Pasta Carbonara",
-        category = "Dinner",
-        servings = 2,
-        ingredients = listOf("pasta", "eggs", "bacon", "parmesan"),
-        steps = "Boil pasta. Fry bacon. Mix eggs and cheese. Combine.",
-        isFavourite = false
-    ),
-    Recipe(
-        id = 2,
-        name = "Avocado Toast",
+        name = "Desi Omelette",
         category = "Breakfast",
         servings = 1,
-        ingredients = listOf("bread", "avocado", "salt", "lemon"),
-        steps = "Toast bread. Mash avocado. Spread and season.",
+        ingredients = listOf(
+            Ingredient("Eggs", 2.0, "whole"),
+            Ingredient("Onion", 0.5, "whole"),
+            Ingredient("Tomato", 0.5, "whole"),
+            Ingredient("Green chilli", 1.0, "whole"),
+            Ingredient("Fresh coriander", 1.0, "tbsp"),
+            Ingredient("Salt", 0.5, "tsp"),
+            Ingredient("Oil", 1.0, "tbsp")
+        ),
+        steps = "1. Beat eggs with salt.\n2. Finely chop onion, tomato, chilli and coriander.\n3. Mix vegetables into eggs.\n4. Heat oil in pan on medium heat.\n5. Pour egg mixture and cook until set.\n6. Fold and serve hot with roti.",
         isFavourite = true
     ),
     Recipe(
-        id = 3,
-        name = "Caesar Salad",
+        id = 2,
+        name = "Daal",
         category = "Lunch",
-        servings = 2,
-        ingredients = listOf("lettuce", "croutons", "parmesan", "caesar dressing"),
-        steps = "Chop lettuce. Add croutons. Dress and toss.",
+        servings = 4,
+        ingredients = listOf(
+            Ingredient("Red lentils", 250.0, "grams"),
+            Ingredient("Onion", 1.0, "whole"),
+            Ingredient("Tomato", 2.0, "whole"),
+            Ingredient("Garlic", 3.0, "cloves"),
+            Ingredient("Ginger", 1.0, "tsp"),
+            Ingredient("Turmeric", 0.5, "tsp"),
+            Ingredient("Red chilli powder", 1.0, "tsp"),
+            Ingredient("Salt", 1.0, "tsp"),
+            Ingredient("Oil", 3.0, "tbsp"),
+            Ingredient("Cumin seeds", 1.0, "tsp"),
+            Ingredient("Fresh coriander", 2.0, "tbsp")
+        ),
+        steps = "1. Wash and boil lentils with turmeric and salt until soft.\n2. In a separate pan, heat oil and fry cumin seeds.\n3. Add chopped onion and fry until golden.\n4. Add garlic, ginger and tomatoes, cook until oil separates.\n5. Add red chilli powder and mix.\n6. Pour tarka over boiled daal.\n7. Garnish with fresh coriander and serve with rice or roti.",
         isFavourite = false
-    )
+    ),
+    Recipe(
+        id = 3,
+        name = "Chicken Pulao",
+        category = "Dinner",
+        servings = 4,
+        ingredients = listOf(
+            Ingredient("Basmati rice", 400.0, "grams"),
+            Ingredient("Chicken", 500.0, "grams"),
+            Ingredient("Onion", 2.0, "whole"),
+            Ingredient("Whole spices", 1.0, "tbsp"),
+            Ingredient("Garlic", 4.0, "cloves"),
+            Ingredient("Ginger", 1.0, "tsp"),
+            Ingredient("Salt", 1.5, "tsp"),
+            Ingredient("Oil", 4.0, "tbsp"),
+            Ingredient("Water", 700.0, "ml")
+        ),
+        steps = "1. Wash and soak rice for 30 minutes.\n2. Heat oil and fry whole spices until fragrant.\n3. Add sliced onions and fry until golden brown.\n4. Add garlic, ginger and chicken pieces.\n5. Cook chicken until it changes colour.\n6. Add water and salt, bring to boil.\n7. Drain and add soaked rice.\n8. Cook on high until water evaporates.\n9. Cover and steam on low heat for 15 minutes.\n10. Fluff and serve with raita.",
+        isFavourite = false
+)
 )
 
 val categories = listOf("All", "Breakfast", "Lunch", "Dinner", "Snacks")

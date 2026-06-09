@@ -13,6 +13,8 @@ import androidx.navigation.NavHostController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.dishdeck.app.ui.theme.DishDeckTheme
+import com.dishdeck.app.model.Recipe
+import com.dishdeck.app.model.Ingredient
 
 /**
  * Displays a filtered list of recipes marked as favourites.
