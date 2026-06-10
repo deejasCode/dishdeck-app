@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -112,7 +113,7 @@ fun RecipeListScreen(navController: NavHostController) {
                     IconButton(onClick = {
                         navController.navigate(Screen.Favourites.route)
                     }) {
-                        Icon(Icons.Default.Menu, contentDescription = "Menu")
+                        Icon(Icons.Default.Favorite, contentDescription = "Favourites")
                     }
                 },
                 actions = {
