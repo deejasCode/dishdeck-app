@@ -26,6 +26,7 @@ val sampleRecipes = listOf(
     Recipe(
         id = 1,
         name = "Desi Omelette",
+        imageUrl = "https://unsplash.com/photos/omelette-on-black-plate-6rtm6a_aVyE",
         category = "Breakfast",
         servings = 1,
         ingredients = listOf(
@@ -43,6 +44,7 @@ val sampleRecipes = listOf(
     Recipe(
         id = 2,
         name = "Daal",
+        imageUrl = "https://unsplash.com/photos/a-bowl-of-soup-and-a-piece-of-bread-on-a-table-qP5SO98yG8k",
         category = "Lunch",
         servings = 4,
         ingredients = listOf(
@@ -64,6 +66,7 @@ val sampleRecipes = listOf(
     Recipe(
         id = 3,
         name = "Chicken Pulao",
+        imageUrl = "https://unsplash.com/photos/a-white-plate-topped-with-rice-and-meat-n7kqI1mISOY",
         category = "Dinner",
         servings = 4,
         ingredients = listOf(

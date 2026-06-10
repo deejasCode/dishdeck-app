@@ -2,21 +2,24 @@ package com.dishdeck.app.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.dishdeck.app.navigation.Screen
-import com.dishdeck.app.screens.sampleRecipes
-import com.dishdeck.app.model.Ingredient
 import com.dishdeck.app.ui.theme.DishDeckTheme
 
 /**
@@ -32,10 +35,7 @@ fun RecipeDetailScreen(
     navController: NavHostController,
     recipeId: String?
 ) {
-    // Find the recipe from sample data using the id
     val recipe = sampleRecipes.find { it.id == recipeId?.toIntOrNull() }
-
-    // State for servings scaler
     var servings by remember { mutableStateOf(recipe?.servings ?: 1) }
 
     Scaffold(
@@ -44,7 +44,7 @@ fun RecipeDetailScreen(
                 title = { Text(recipe?.name ?: "Recipe") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
@@ -64,26 +64,22 @@ fun RecipeDetailScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
-            // Image placeholder
-            Box(
+            // 1. Recipe image
+            AsyncImage(
+                model = recipe?.imageUrl,
+                contentDescription = recipe?.name,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Card(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Box(contentAlignment = Alignment.Center,
-                        modifier = Modifier.fillMaxSize()) {
-                        Text("Recipe Image")
-                    }
-                }
-            }
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(12.dp)),
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(id = android.R.drawable.ic_menu_gallery),
+                error = painterResource(id = android.R.drawable.ic_menu_gallery)
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Servings scaler
+            // 2. Servings scaler
             Text("Servings", style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -104,27 +100,26 @@ fun RecipeDetailScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Scaled ingredients
+            // 3. Ingredients with scaling
             Text("Ingredients", style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(8.dp))
             recipe?.ingredients?.forEach { ingredient ->
-                // Calculate scaled quantity
                 val scaledQuantity = ingredient.quantity *
-                        (servings.toDouble() / (recipe.servings.toDouble()))
-
-                // Format nicely - show whole numbers without decimal point
+                        (servings.toDouble() / recipe.servings.toDouble())
                 val formattedQuantity = if (scaledQuantity % 1.0 == 0.0) {
                     scaledQuantity.toInt().toString()
                 } else {
-                    String.format("%.1f", scaledQuantity)
+                    "%.1f".format(scaledQuantity)
                 }
-
                 Text(
                     text = "• $formattedQuantity ${ingredient.unit} ${ingredient.name}",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
-            // Steps
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 4. Steps
             Text("Steps", style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
