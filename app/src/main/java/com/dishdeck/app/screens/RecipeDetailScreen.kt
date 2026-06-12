@@ -2,7 +2,6 @@ package com.dishdeck.app.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -11,14 +10,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
 import com.dishdeck.app.navigation.Screen
 import com.dishdeck.app.ui.theme.DishDeckTheme
 
@@ -64,18 +59,19 @@ fun RecipeDetailScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
-            // 1. Recipe image
-            AsyncImage(
-                model = recipe?.imageUrl,
-                contentDescription = recipe?.name,
+            // 1. Recipe image placeholder
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
-                    .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Crop,
-                placeholder = painterResource(id = android.R.drawable.ic_menu_gallery),
-                error = painterResource(id = android.R.drawable.ic_menu_gallery)
-            )
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Text("Recipe Image")
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -136,7 +132,7 @@ fun RecipeDetailScreenPreview() {
     DishDeckTheme {
         RecipeDetailScreen(
             navController = rememberNavController(),
-            recipeId = "1"
+            recipeId = "3"
         )
     }
 }

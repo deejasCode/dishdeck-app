@@ -5,7 +5,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -13,7 +12,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import android.content.pm.PackageManager
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
+import coil.compose.AsyncImage
+import androidx.core.content.ContextCompat
+import java.io.File
 import com.dishdeck.app.ui.theme.DishDeckTheme
+
 
 /**
  * Screen for adding a new recipe or editing an existing one.
@@ -32,8 +41,31 @@ fun AddRecipeScreen(navController: NavHostController) {
     var ingredients by remember { mutableStateOf("") }
     var steps by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    var capturedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var tempImageUri by remember { mutableStateOf<Uri?>(null) }
 
-    val categories = listOf("Breakfast", "Lunch", "Dinner", "Snacks")
+// Launches the camera and saves the photo to tempImageUri
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success) {
+            capturedImageUri = tempImageUri
+        }
+    }
+
+// Requests camera permission, then launches camera if granted
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            val uri = createImageUri(context)
+            tempImageUri = uri
+            cameraLauncher.launch(uri)
+        }
+    }
+
+    val categories = listOf("Breakfast", "Lunch", "Dinner", "Snacks", "Dessert")
 
     Scaffold(
         topBar = {
@@ -132,13 +164,35 @@ fun AddRecipeScreen(navController: NavHostController) {
                     .height(120.dp)
             )
 
-            // Image upload placeholder
-            Text("Upload Photo", style = MaterialTheme.typography.labelLarge)
+            // Camera capture for recipe photo
+            Text("Recipe Photo", style = MaterialTheme.typography.labelLarge)
+
+            if (capturedImageUri != null) {
+                AsyncImage(
+                    model = capturedImageUri,
+                    contentDescription = "Captured recipe photo",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
             OutlinedButton(
-                onClick = { },
+                onClick = {
+                    val permission = android.Manifest.permission.CAMERA
+                    if (ContextCompat.checkSelfPermission(context, permission)
+                        == PackageManager.PERMISSION_GRANTED) {
+                        val uri = createImageUri(context)
+                        tempImageUri = uri
+                        cameraLauncher.launch(uri)
+                    } else {
+                        permissionLauncher.launch(permission)
+                    }
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Choose Photo")
+                Text(if (capturedImageUri != null) "Retake Photo" else "Take Photo of Recipe")
             }
 
             // Save button
@@ -158,4 +212,22 @@ fun AddRecipeScreenPreview() {
     DishDeckTheme {
         AddRecipeScreen(navController = rememberNavController())
     }
+}
+
+/**
+ * Creates a temporary file URI for storing a captured photo.
+ *
+ * @param context The application context.
+ * @return A content URI pointing to the new image file.
+ */
+fun createImageUri(context: android.content.Context): Uri {
+    val imageFile = File(
+        context.getExternalFilesDir("Pictures"),
+        "recipe_${System.currentTimeMillis()}.jpg"
+    )
+    return FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.fileprovider",
+        imageFile
+    )
 }

@@ -26,7 +26,6 @@ val sampleRecipes = listOf(
     Recipe(
         id = 1,
         name = "Desi Omelette",
-        imageUrl = "https://unsplash.com/photos/omelette-on-black-plate-6rtm6a_aVyE",
         category = "Breakfast",
         servings = 1,
         ingredients = listOf(
@@ -44,7 +43,6 @@ val sampleRecipes = listOf(
     Recipe(
         id = 2,
         name = "Daal",
-        imageUrl = "https://unsplash.com/photos/a-bowl-of-soup-and-a-piece-of-bread-on-a-table-qP5SO98yG8k",
         category = "Lunch",
         servings = 4,
         ingredients = listOf(
@@ -66,7 +64,6 @@ val sampleRecipes = listOf(
     Recipe(
         id = 3,
         name = "Chicken Pulao",
-        imageUrl = "https://unsplash.com/photos/a-white-plate-topped-with-rice-and-meat-n7kqI1mISOY",
         category = "Dinner",
         servings = 4,
         ingredients = listOf(
@@ -82,10 +79,86 @@ val sampleRecipes = listOf(
         ),
         steps = "1. Wash and soak rice for 30 minutes.\n2. Heat oil and fry whole spices until fragrant.\n3. Add sliced onions and fry until golden brown.\n4. Add garlic, ginger and chicken pieces.\n5. Cook chicken until it changes colour.\n6. Add water and salt, bring to boil.\n7. Drain and add soaked rice.\n8. Cook on high until water evaporates.\n9. Cover and steam on low heat for 15 minutes.\n10. Fluff and serve with raita.",
         isFavourite = false
-)
+    ),
+    Recipe(
+        id = 4,
+        name = "Brownies",
+        category = "Dessert",
+        servings = 8,
+        ingredients = listOf(
+            Ingredient("Dark chocolate 55-60%", 113.0, "grams"),
+            Ingredient("Butter", 140.0, "grams"),
+            Ingredient("Sugar", 150.0, "grams"),
+            Ingredient("Eggs", 2.0, "whole"),
+            Ingredient("Instant coffee or a shot of espresso", 1.0, "tsp"),
+            Ingredient("All purpose flour", 65.0, "grams"),
+            Ingredient("Cocoa powder", 35.0, "grams"),
+            Ingredient("Salt", 0.5, "tsp")
+        ),
+        steps = "1. Preheat oven to 175°C.\n2. Melt butter and chocolate.\n3. Beat eggs with sugar, and add butter and chocolate mixture.\n4. Sift in cocoa powder, flour and salt, fold gently, and lastly add coffee.\n5. Stir in chocolate chips(optional).\n6. Pour into a greased tray.\n7. Bake for 25-30 minutes.\n8. Cool before slicing.",
+        isFavourite = true
+    ),
+    Recipe(
+        id = 5,
+        name = "Shahi Tukre",
+        category = "Dessert",
+        servings = 8,
+        ingredients = listOf(
+            Ingredient("White bread or Brioche bread", 350.0, "grams"),
+            Ingredient("Butter", 113.0, "grams"),
+            Ingredient("Milk", 5.0, "cups"),
+            Ingredient("Cardamom", 5.0, "pods"),
+            Ingredient("Salt", 1.0, "pinch"),
+            Ingredient("Sweetened condensed milk", 300.0, "grams")
+        ),
+        steps = "1. Fry bread slices with butter until golden.\n2. Boil milk with condensed milk, cardamom and saffron(optional) until slightly thickened.\n3. Place fried bread in a serving dish.\n4. Pour the milk mixture over the bread.\n5. Garnish with chopped almonds and pistachios.\n6. Chill before serving.",
+        isFavourite = false
+    ),
+    Recipe(
+        id = 6,
+        name = "Chicken Pot Pie",
+        category = "Lunch",
+        servings = 4,
+        ingredients = listOf(
+            Ingredient("Chicken breast", 400.0, "grams"),
+            Ingredient("Carrots", 2.0, "whole"),
+            Ingredient("Peas", 100.0, "grams"),
+            Ingredient("Onion", 1.0, "whole"),
+            Ingredient("Butter", 60.0, "grams"),
+            Ingredient("Flour", 60.0, "grams"),
+            Ingredient("Chicken stock", 500.0, "ml"),
+            Ingredient("Milk", 100.0, "ml"),
+            Ingredient("Puff pastry sheet", 1.0, "whole"),
+            Ingredient("Salt", 1.0, "tsp"),
+            Ingredient("Black pepper", 0.5, "tsp")
+        ),
+        steps = "1. Cook chicken and dice into pieces.\n2. Sauté onion and carrots in butter.\n3. Stir in flour to form a paste.\n4. Gradually add stock and milk, stirring until thickened.\n5. Add chicken and peas, season with salt and pepper.\n6. Pour mixture into a baking dish.\n7. Cover with puff pastry and brush with egg wash.\n8. Bake at 200°C for 25-30 minutes until golden.",
+        isFavourite = false
+    ),
+    Recipe(
+        id = 7,
+        name = "Mutton Karahi",
+        category = "Dinner",
+        servings = 4,
+        ingredients = listOf(
+            Ingredient("Mutton", 500.0, "grams"),
+            Ingredient("Tomatoes", 4.0, "whole"),
+            Ingredient("Green chillies", 4.0, "whole"),
+            Ingredient("Ginger", 1.0, "tbsp"),
+            Ingredient("Garlic", 1.0, "tbsp"),
+            Ingredient("Yogurt", 100.0, "grams"),
+            Ingredient("Oil", 5.0, "tbsp"),
+            Ingredient("Red chilli powder", 1.0, "tsp"),
+            Ingredient("Salt", 1.5, "tsp"),
+            Ingredient("Fresh coriander", 2.0, "tbsp"),
+            Ingredient("Ginger julienne", 1.0, "tbsp")
+        ),
+        steps = "1. Heat oil in a karahi/wok.\n2. Add mutton and fry until browned.\n3. Add ginger and garlic paste, cook briefly.\n4. Add chopped tomatoes and cook until soft.\n5. Add yogurt, salt and chilli powder.\n6. Cover and cook on low heat until mutton is tender, adding water if needed.\n7. Add green chillies and cook until oil separates.\n8. Garnish with fresh coriander and ginger julienne.\n9. Serve with naan.",
+        isFavourite = true
+    )
 )
 
-val categories = listOf("All", "Breakfast", "Lunch", "Dinner", "Snacks")
+val categories = listOf("All", "Breakfast", "Lunch", "Dinner", "Snacks", "Dessert")
 
 /**
  * Displays the main recipe list screen with category filtering.
