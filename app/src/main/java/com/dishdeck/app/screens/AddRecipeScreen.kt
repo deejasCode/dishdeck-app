@@ -21,6 +21,8 @@ import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import androidx.core.content.ContextCompat
 import java.io.File
+import com.dishdeck.app.model.Recipe
+import com.dishdeck.app.model.Ingredient
 import com.dishdeck.app.ui.theme.DishDeckTheme
 
 
@@ -32,14 +34,25 @@ import com.dishdeck.app.ui.theme.DishDeckTheme
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddRecipeScreen(navController: NavHostController) {
+fun AddRecipeScreen(navController: NavHostController, recipeId: String? = null) {
+
+    // Find the recipe being edited (if any)
+    val existingRecipe = remember(recipeId) {
+        sampleRecipes.find { it.id == recipeId?.toIntOrNull() }
+    }
 
     // State for each input field
-    var recipeName by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("Breakfast") }
-    var servings by remember { mutableStateOf(1f) }
-    var ingredients by remember { mutableStateOf("") }
-    var steps by remember { mutableStateOf("") }
+    var recipeName by remember { mutableStateOf(existingRecipe?.name ?: "") }
+    var selectedCategory by remember { mutableStateOf(existingRecipe?.category ?: "Breakfast") }
+    var servings by remember { mutableStateOf((existingRecipe?.servings ?: 1).toFloat()) }
+    var ingredients by remember {
+        mutableStateOf(
+            existingRecipe?.ingredients?.joinToString("\n") {
+                "${it.quantity} ${it.unit} ${it.name}"
+            } ?: ""
+        )
+    }
+    var steps by remember { mutableStateOf(existingRecipe?.steps ?: "") }
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     var capturedImageUri by remember { mutableStateOf<Uri?>(null) }
@@ -70,7 +83,7 @@ fun AddRecipeScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Add Recipe") },
+                title = { Text(if (existingRecipe != null) "Edit Recipe" else "Add Recipe") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -197,10 +210,44 @@ fun AddRecipeScreen(navController: NavHostController) {
 
             // Save button
             Button(
-                onClick = { navController.popBackStack() },
+                onClick = {
+                    val parsedIngredients = parseIngredients(ingredients)
+                    val photoUri = capturedImageUri?.toString() ?: existingRecipe?.imageUrl ?: ""
+
+                    if (existingRecipe != null) {
+                        // Update existing recipe
+                        val index = sampleRecipes.indexOf(existingRecipe)
+                        if (index != -1) {
+                            sampleRecipes[index] = existingRecipe.copy(
+                                name = recipeName,
+                                category = selectedCategory,
+                                servings = servings.toInt(),
+                                ingredients = parsedIngredients,
+                                steps = steps,
+                                imageUrl = photoUri
+                            )
+                        }
+                    } else {
+                        // Add new recipe
+                        val newId = (sampleRecipes.maxOfOrNull { it.id } ?: 0) + 1
+                        sampleRecipes.add(
+                            Recipe(
+                                id = newId,
+                                name = recipeName,
+                                category = selectedCategory,
+                                servings = servings.toInt(),
+                                ingredients = parsedIngredients,
+                                steps = steps,
+                                imageUrl = photoUri,
+                                isFavourite = false
+                            )
+                        )
+                    }
+                    navController.popBackStack()
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Save Recipe")
+                Text(if (existingRecipe != null) "Update Recipe" else "Save Recipe")
             }
         }
     }
@@ -230,4 +277,28 @@ fun createImageUri(context: android.content.Context): Uri {
         "${context.packageName}.fileprovider",
         imageFile
     )
+}
+
+/**
+ * Parses a multi-line ingredients string into a list of Ingredient objects.
+ * Expected format per line: "quantity unit name" (e.g. "500.0 grams Mutton").
+ * Lines that don't match this format are skipped.
+ *
+ * @param text The raw ingredients text from the input field.
+ * @return A list of parsed Ingredient objects.
+ */
+fun parseIngredients(text: String): List<Ingredient> {
+    return text.lines()
+        .mapNotNull { line ->
+            val trimmed = line.trim()
+            if (trimmed.isEmpty()) return@mapNotNull null
+
+            val parts = trimmed.split(" ", limit = 3)
+            if (parts.size == 3) {
+                val quantity = parts[0].toDoubleOrNull() ?: return@mapNotNull null
+                Ingredient(name = parts[2], quantity = quantity, unit = parts[1])
+            } else {
+                null
+            }
+        }
 }

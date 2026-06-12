@@ -17,12 +17,13 @@ import androidx.navigation.NavHostController
 import com.dishdeck.app.model.Recipe
 import com.dishdeck.app.navigation.Screen
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.mutableStateListOf
 import com.dishdeck.app.ui.theme.DishDeckTheme
 import androidx.navigation.compose.rememberNavController
 import com.dishdeck.app.model.Ingredient
 
 // Sample data to display while we don't have a backend yet
-val sampleRecipes = listOf(
+val sampleRecipes = mutableStateListOf(
     Recipe(
         id = 1,
         name = "Desi Omelette",

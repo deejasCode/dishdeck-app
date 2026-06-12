@@ -12,9 +12,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import com.dishdeck.app.screens.sampleRecipes
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dishdeck.app.navigation.Screen
+import coil.compose.AsyncImage
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.window.Dialog
 import com.dishdeck.app.ui.theme.DishDeckTheme
 
 /**
@@ -32,6 +41,7 @@ fun RecipeDetailScreen(
 ) {
     val recipe = sampleRecipes.find { it.id == recipeId?.toIntOrNull() }
     var servings by remember { mutableStateOf(recipe?.servings ?: 1) }
+    var showFullImage by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -44,7 +54,21 @@ fun RecipeDetailScreen(
                 },
                 actions = {
                     IconButton(onClick = {
-                        navController.navigate(Screen.AddRecipe.route)
+                        recipe?.let {
+                            val index = sampleRecipes.indexOf(it)
+                            if (index != -1) {
+                                sampleRecipes[index] = it.copy(isFavourite = !it.isFavourite)
+                            }
+                        }
+                    }) {
+                        Icon(
+                            imageVector = if (recipe?.isFavourite == true)
+                                Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = "Toggle Favourite"
+                        )
+                    }
+                    IconButton(onClick = {
+                        navController.navigate("add_recipe?recipeId=${recipe?.id}")
                     }) {
                         Icon(Icons.Default.Edit, contentDescription = "Edit")
                     }
@@ -59,21 +83,47 @@ fun RecipeDetailScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
-            // 1. Recipe image placeholder
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize()
+            // 1. Recipe image - shows photo if available, otherwise placeholder
+            if (!recipe?.imageUrl.isNullOrEmpty()) {
+                AsyncImage(
+                    model = recipe?.imageUrl,
+                    contentDescription = recipe?.name,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable { showFullImage = true },
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
                 ) {
-                    Text("Recipe Image")
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Text("Recipe Image")
+                    }
                 }
+            }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            // Full screen dialog
+            if (showFullImage) {
+            Dialog(onDismissRequest = { showFullImage = false }) {
+                AsyncImage(
+                    model = recipe?.imageUrl,
+                    contentDescription = recipe?.name,
+                    modifier = Modifier.fillMaxWidth(),
+                    contentScale = ContentScale.Fit
+                    )
+                }
+            }
 
             // 2. Servings scaler
             Text("Servings", style = MaterialTheme.typography.titleMedium)
@@ -124,7 +174,7 @@ fun RecipeDetailScreen(
             )
         }
     }
-}
+
 
 @Preview(showBackground = true)
 @Composable
