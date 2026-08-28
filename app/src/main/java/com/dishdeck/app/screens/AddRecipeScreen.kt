@@ -58,7 +58,7 @@ fun AddRecipeScreen(navController: NavHostController, recipeId: String? = null) 
     var capturedImageUri by remember { mutableStateOf<Uri?>(null) }
     var tempImageUri by remember { mutableStateOf<Uri?>(null) }
 
-// Launches the camera and saves the photo to tempImageUri
+    // Launches the camera and saves the photo to tempImageUri
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
@@ -67,7 +67,7 @@ fun AddRecipeScreen(navController: NavHostController, recipeId: String? = null) 
         }
     }
 
-// Requests camera permission, then launches camera if granted
+    // Requests camera permission, then launches camera if granted
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { granted ->
@@ -76,6 +76,13 @@ fun AddRecipeScreen(navController: NavHostController, recipeId: String? = null) 
             tempImageUri = uri
             cameraLauncher.launch(uri)
         }
+    }
+
+    // Launches the gallery to pick an existing photo
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let { capturedImageUri = it }
     }
 
     val categories = listOf("Breakfast", "Lunch", "Dinner", "Snacks", "Dessert")
@@ -206,6 +213,14 @@ fun AddRecipeScreen(navController: NavHostController, recipeId: String? = null) 
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(if (capturedImageUri != null) "Retake Photo" else "Take Photo of Recipe")
+            }
+
+            // Gallery picker
+            OutlinedButton(
+                onClick = { galleryLauncher.launch("image/*") },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Choose from Gallery")
             }
 
             // Save button
