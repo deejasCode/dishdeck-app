@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dishdeck.app.navigation.Screen
 import coil.compose.AsyncImage
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,6 +54,7 @@ fun RecipeDetailScreen(
                     }
                 },
                 actions = {
+                    // Favourite toggle
                     IconButton(onClick = {
                         recipe?.let {
                             val index = sampleRecipes.indexOf(it)
@@ -67,6 +69,21 @@ fun RecipeDetailScreen(
                             contentDescription = "Toggle Favourite"
                         )
                     }
+
+                    // Delete recipe
+                    IconButton(onClick = {
+                        recipe?.let {
+                            sampleRecipes.remove(it)
+                            navController.popBackStack()
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete Recipe"
+                        )
+                    }
+
+                    // Edit recipe
                     IconButton(onClick = {
                         navController.navigate("add_recipe?recipeId=${recipe?.id}")
                     }) {
@@ -108,7 +125,6 @@ fun RecipeDetailScreen(
                         Text("Recipe Image")
                     }
                 }
-            }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -174,6 +190,7 @@ fun RecipeDetailScreen(
             )
         }
     }
+}
 
 
 @Preview(showBackground = true)
